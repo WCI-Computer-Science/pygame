@@ -246,8 +246,13 @@ while True:
                 gamelevel = messagescreen.update(moveon=True, reset=True, nextlevel=gamelevel+1)
                 messagescreen.draw(screen)
         if event.type == KEYDOWN:
-            if event.key == K_f:
+            if event.key == K_f: # For debugging and level creation
                 print(rects.union().center)
+            elif event.key == K_r:
+                rects.reset()
+                for sprite in walls:
+                    sprite.reset()
+                jumpenergy.setenergy(gamelevel)
     if gamelevel > len(walllist) or gamelevel > len(winslist):
         gamelevel = messagescreen.update(win=True, reset=True)
         pygame.display.update()
