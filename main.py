@@ -76,7 +76,7 @@ class Wall(pygame.sprite.Sprite):
     def draw(self, screen):
         pygame.draw.rect(screen, (255, 0, 0), self.rect)
 
-rects = Rectangles((400, 300), (450, 300), (50, 100), (50, 100), (0, 255, 0), (0, 0, 255), 20, WIDTH, HEIGHT)
+rects = Rectangles((350, 250), (400, 250), (50, 100), (50, 100), (0, 255, 0), (0, 0, 255), 20, WIDTH, HEIGHT)
 walls = pygame.sprite.Group()
 walls.add(Wall(100, 100, 40, 20))
 
