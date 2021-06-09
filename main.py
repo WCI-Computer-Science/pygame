@@ -87,6 +87,9 @@ class Wall(pygame.sprite.Sprite):
     def checkcollision(self, rect1, rect2):
         return self.rect.colliderect(rect1) or self.rect.colliderect(rect2)
 
+    def reset(self):
+        pass
+
 class WinShape(pygame.sprite.Sprite):
     def __init__(self, centerx, centery, radius):
         super().__init__()
@@ -166,6 +169,9 @@ class OneWayWall(Wall):
             else:
                 return True
         return False
+    
+    def reset(self):
+        self.defused = False
 
 
 rects = Rectangles((350, 250), (400, 250), (50, 100), (50, 100), (0, 255, 0), (0, 0, 255), 20, WIDTH, HEIGHT)
@@ -197,7 +203,7 @@ messagescreen = MessageScreen(WIDTH, HEIGHT)
 clock = pygame.time.Clock()
 
 gamelevel = 1
-prevgamelevel = 0
+prevgamelevel = 1
 
 while True:
     clock.tick(FRAMERATE) # Stall until the next frame
@@ -221,6 +227,8 @@ while True:
     if prevgamelevel != gamelevel:
         prevgamelevel = gamelevel
         rects.reset()
+        for sprite in walls:
+            sprite.reset()
     screen.fill((255, 255, 255))
     if gamelevel != 0:
         if gamelevel > len(walllist) or gamelevel > len(winslist):
