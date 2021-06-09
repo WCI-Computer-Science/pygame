@@ -84,14 +84,17 @@ class Wall(pygame.sprite.Sprite):
 
 class LoseScreen():
     def __init__(self):
-        pass
+        self.c = 0
+
     def draw(self, screen):
         pass
+
     def update(self, reset=False):
         if reset:
-            return 0
+            self.c = 0
         else:
-            return 1
+            self.c += 1
+        return self.c > 20
 
 rects = Rectangles((350, 250), (400, 250), (50, 100), (50, 100), (0, 255, 0), (0, 0, 255), 20, WIDTH, HEIGHT)
 walls = pygame.sprite.Group()
