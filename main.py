@@ -86,14 +86,21 @@ class LoseScreen():
     def __init__(self, screenwidth, screenheight):
         self.c = 0
         self.backgroundrect = pygame.Rect((0, 0), (screenwidth, screenheight))
-        self.font = pygame.font.Font(None, 100)
-        self.text = self.font.render("You lost!", True, (255, 255, 255))
-        self.text_rect = self.text.get_rect()
-        self.text_rect.center = (screenwidth/2, screenheight/2)
+        font = pygame.font.Font(None, 100)
+        self.text = font.render("You lost!", True, (255, 255, 255))
+        self.textrect = self.text.get_rect()
+        self.textrect.center = (screenwidth/2, screenheight/2)
+        self.canclick = False
+        clickfont = pygame.font.Font(None, 30)
+        self.clicktext = clickfont.render("Click to try again.", True, (255, 255, 255))
+        self.clicktextrect = self.clicktext.get_rect()
+        self.clicktextrect.center = (screenwidth/2, screenheight/2+100)
 
     def draw(self, screen):
         pygame.draw.rect(screen, (255, 0, 0), self.backgroundrect)
-        screen.blit(self.text, self.text_rect)
+        screen.blit(self.text, self.textrect)
+        if self.canclick:
+            screen.blit(self.clicktext, self.clicktextrect)
 
     def update(self, reset=False):
         if reset:
@@ -104,6 +111,7 @@ class LoseScreen():
         if self.c > 20:
             if pygame.mouse.get_pressed()[0]:
                 out = 1
+            self.canclick = True
         return out
 
 rects = Rectangles((350, 250), (400, 250), (50, 100), (50, 100), (0, 255, 0), (0, 0, 255), 20, WIDTH, HEIGHT)
