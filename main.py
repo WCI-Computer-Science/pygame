@@ -78,7 +78,7 @@ class Wall(pygame.sprite.Sprite):
 
 rects = Rectangles((350, 250), (400, 250), (50, 100), (50, 100), (0, 255, 0), (0, 0, 255), 20, WIDTH, HEIGHT)
 walls = pygame.sprite.Group()
-walls.add(Wall(100, 100, 40, 20))
+walls.add(Wall(100, 100, WIDTH-200, 20))
 
 clock = pygame.time.Clock()
 
