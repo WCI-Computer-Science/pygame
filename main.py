@@ -89,5 +89,6 @@ while True:
     print(rects.checkcollision(walls))
     screen.fill((255, 255, 255))
     rects.draw(screen)
-    walls.draw(screen)
+    for sprite in walls:
+        sprite.draw(screen)
     pygame.display.update()
