@@ -92,28 +92,35 @@ class WinShape(pygame.sprite.Sprite):
         pygame.draw.circle(screen, (0, 255, 0), self.center, self.radius)
 
 class MessageScreen():
-    def __init__(self, screenwidth, screenheight, win=False):
+    def __init__(self, screenwidth, screenheight):
         self.c = 0
-        self.win = win
+        self.win = False
         self.backgroundrect = pygame.Rect((0, 0), (screenwidth, screenheight))
-        font = pygame.font.Font(None, 100)
-        self.text = font.render("You lost!", True, (255, 255, 255)) if not win else font.render("You passed the level!", True, (255, 255, 255))
-        self.textrect = self.text.get_rect()
-        self.textrect.center = (screenwidth/2, screenheight/2)
+        self.font = pygame.font.Font(None, 100)
         self.canclick = False
-        clickfont = pygame.font.Font(None, 30)
-        self.clicktext = clickfont.render("Click to try again.", True, (255, 255, 255)) if not win else clickfont.render("Click to move on.", True, (255, 255, 255))
-        self.clicktextrect = self.clicktext.get_rect()
-        self.clicktextrect.center = (screenwidth/2, screenheight/2+100)
+        self.clickfont = pygame.font.Font(None, 30)
+        self.screenwidth = screenwidth
+        self.screenheight = screenheight
+        
 
     def draw(self, screen):
-        pygame.draw.rect(screen, (255, 0, 0) if not self.win else (0, 255, 0), self.backgroundrect)
-        screen.blit(self.text, self.textrect)
-        if self.canclick:
-            screen.blit(self.clicktext, self.clicktextrect)
 
-    def update(self, reset=False):
+        text = self.font.render("You lost!", True, (255, 255, 255)) if not self.win else self.font.render("You passed the level!", True, (255, 255, 255))
+        textrect = text.get_rect()
+        textrect.center = (self.screenwidth/2, self.screenheight/2)
+
+        pygame.draw.rect(screen, (255, 0, 0) if not self.win else (0, 255, 0), self.backgroundrect)
+        screen.blit(text, textrect)
+        if self.canclick:
+            clicktext = self.clickfont.render("Click to try again.", True, (255, 255, 255)) if not self.win else self.clickfont.render("Click to move on.", True, (255, 255, 255))
+            clicktextrect = clicktext.get_rect()
+            clicktextrect.center = (self.screenwidth/2, self.screenheight/2+100)
+            screen.blit(clicktext, clicktextrect)
+
+    def update(self, win=False, reset=False):
         if reset:
+            self.win = win
+            self.canclick = False
             self.c = 0
         else:
             self.c += 1
@@ -134,8 +141,7 @@ walls.add(Wall(WIDTH-150, 125, 25, HEIGHT-250))
 wins = pygame.sprite.Group()
 wins.add(WinShape(50, 50, 25))
 
-losescreen = MessageScreen(WIDTH, HEIGHT)
-winscreen = MessageScreen(WIDTH, HEIGHT, win=True)
+messagescreen = MessageScreen(WIDTH, HEIGHT)
 
 clock = pygame.time.Clock()
 
@@ -152,8 +158,11 @@ while True:
             rects.setpos(pos[0], pos[1], safe=True, colliders=walls)
         if event.type == USEREVENT:
             if event.code == "LOSE":
-                gamelevel = losescreen.update(reset=True)
-                losescreen.draw(screen)
+                gamelevel = messagescreen.update(reset=True)
+                messagescreen.draw(screen)
+            elif event.code == "WIN":
+                gamelevel = messagescreen.update(win=True, reset=True)
+                messagescreen.draw(screen)
 
     if prevgamelevel != gamelevel:
         prevgamelevel = gamelevel
@@ -164,6 +173,9 @@ while True:
         if rects.checkcollision(walls):
             loseevent = pygame.event.Event(USEREVENT, code="LOSE")
             pygame.event.post(loseevent)
+        if rects.checkcollision(wins):
+            winevent = pygame.event.Event(USEREVENT, code="WIN")
+            pygame.event.post(winevent)
         rects.draw(screen)
         for sprite in walls:
             sprite.draw(screen)
@@ -171,6 +183,6 @@ while True:
             sprite.draw(screen)
         
     else:
-        gamelevel = losescreen.update()
-        losescreen.draw(screen)
+        gamelevel = messagescreen.update()
+        messagescreen.draw(screen)
     pygame.display.update()
