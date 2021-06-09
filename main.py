@@ -141,6 +141,31 @@ class MessageScreen():
             self.canclick = True
         return out
 
+class OneWayWall(Wall):
+    def __init__(self, x, y, w, h, rect1pass, rect2pass):
+        super().__init__(x, y, w, h)
+        self.rect1pass = rect1pass
+        self.rect2pass = rect2pass
+        self.defused = False
+
+    def draw(self, screen):
+        if not self.defused:
+            super().draw(screen)
+    
+    def checkcollision(self, rect1, rect2):
+        if rect1.colliderect(self.rect):
+            if self.rect1pass:
+                self.defused = True
+            else:
+                return self.defused
+        if rect2.colliderect(self.rect):
+            if self.rect2pass:
+                self.defused = True
+            else:
+                return self.defused
+        return False
+
+
 rects = Rectangles((350, 250), (400, 250), (50, 100), (50, 100), (0, 255, 0), (0, 0, 255), 20, WIDTH, HEIGHT)
 
 walllist = []
