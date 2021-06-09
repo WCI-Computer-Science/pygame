@@ -81,8 +81,8 @@ class Wall(pygame.sprite.Sprite):
         super().__init__()
         self.rect = pygame.Rect((x, y), (w, h))
     
-    def draw(self, screen):
-        pygame.draw.rect(screen, (255, 0, 0), self.rect)
+    def draw(self, screen, colour=None):
+        pygame.draw.rect(screen, (255, 0, 0) if colour==None else colour, self.rect)
 
     def checkcollision(self, rect1, rect2):
         return self.rect.colliderect(rect1) or self.rect.colliderect(rect2)
@@ -145,15 +145,15 @@ class MessageScreen():
         return out
 
 class OneWayWall(Wall):
-    def __init__(self, x, y, w, h, rect1pass, rect2pass):
+    def __init__(self, x, y, w, h, rect1pass): # if rect1pass is false, rect2pass must be true.
         super().__init__(x, y, w, h)
         self.rect1pass = rect1pass
-        self.rect2pass = rect2pass
+        self.rect2pass = not rect1pass
         self.defused = False
 
     def draw(self, screen):
         if not self.defused:
-            super().draw(screen)
+            super().draw(screen, colour=((0, 255, 0) if self.rect1pass else (0, 0, 255)))
     
     def checkcollision(self, rect1, rect2):
         if self.defused:
@@ -194,7 +194,7 @@ walllist[-1].add(Wall(0, 0, WIDTH, 25))
 walllist[-1].add(Wall(0, 0, 25, HEIGHT))
 walllist[-1].add(Wall(0, HEIGHT-25, WIDTH, 25))
 walllist[-1].add(Wall(WIDTH-25, 0, 25, HEIGHT))
-walllist[-1].add(OneWayWall(540, 0, 25, HEIGHT, False, True))
+walllist[-1].add(OneWayWall(540, 0, 25, HEIGHT, False))
 winslist.append(pygame.sprite.Group())
 winslist[-1].add(WinShape(700, 300, 25))
 
