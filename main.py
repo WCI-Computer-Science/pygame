@@ -176,14 +176,22 @@ class OneWayWall(Wall):
         self.defused = False
 
 class Energy():
-    def __init__(self, energylevels):
+    def __init__(self, energylevels, screenwidth, screenheight):
         self.energylevels = energylevels
         self.setenergy(1)
+        self.font = pygame.font.Font(None, 30)
+        self.screenwidth = screenwidth
+        self.screenheight = screenheight
     
     def setenergy(self, gamelevel):
         self.energylevel = self.energylevels[gamelevel-1]
 
     def draw(self, screen):
+        text = self.font.render(str(self.energylevel), True, (0, 0, 0))
+        textrect = text.get_rect()
+        textrect.x = self.screenwidth-50
+        textrect.y = self.screenheight-50
+        screen.blit(text, textrect)
         print(self.energylevel)
 
 rects = Rectangles((350, 250), (400, 250), (50, 100), (50, 100), (0, 255, 0), (0, 0, 255), 20, WIDTH, HEIGHT)
@@ -214,7 +222,7 @@ messagescreen = MessageScreen(WIDTH, HEIGHT)
 jumpenergy = Energy([
     1,
     0,
-])
+], WIDTH, HEIGHT)
 
 clock = pygame.time.Clock()
 
