@@ -82,22 +82,23 @@ class Wall(pygame.sprite.Sprite):
     def draw(self, screen):
         pygame.draw.rect(screen, (255, 0, 0), self.rect)
 
-class LoseScreen():
-    def __init__(self, screenwidth, screenheight):
+class MessageScreen():
+    def __init__(self, screenwidth, screenheight, win=False):
         self.c = 0
+        self.win = win
         self.backgroundrect = pygame.Rect((0, 0), (screenwidth, screenheight))
         font = pygame.font.Font(None, 100)
-        self.text = font.render("You lost!", True, (255, 255, 255))
+        self.text = font.render("You lost!", True, (255, 255, 255)) if not win else font.render("You passed the level!", True, (255, 255, 255))
         self.textrect = self.text.get_rect()
         self.textrect.center = (screenwidth/2, screenheight/2)
         self.canclick = False
         clickfont = pygame.font.Font(None, 30)
-        self.clicktext = clickfont.render("Click to try again.", True, (255, 255, 255))
+        self.clicktext = clickfont.render("Click to try again.", True, (255, 255, 255)) if not win else clickfont.render("Click to move on.", True, (255, 255, 255))
         self.clicktextrect = self.clicktext.get_rect()
         self.clicktextrect.center = (screenwidth/2, screenheight/2+100)
 
     def draw(self, screen):
-        pygame.draw.rect(screen, (255, 0, 0), self.backgroundrect)
+        pygame.draw.rect(screen, (255, 0, 0) if not self.win else (0, 255, 0), self.backgroundrect)
         screen.blit(self.text, self.textrect)
         if self.canclick:
             screen.blit(self.clicktext, self.clicktextrect)
@@ -120,7 +121,9 @@ walls.add(Wall(125, 125, WIDTH-250, 25))
 walls.add(Wall(125, HEIGHT-150, WIDTH-250, 25))
 walls.add(Wall(125, 125, 25, HEIGHT-250))
 walls.add(Wall(WIDTH-150, 125, 25, HEIGHT-250))
-losescreen = LoseScreen(WIDTH, HEIGHT)
+
+losescreen = MessageScreen(WIDTH, HEIGHT)
+winscreen = MessageScreen(WIDTH, HEIGHT, win=True)
 
 clock = pygame.time.Clock()
 
