@@ -248,7 +248,10 @@ while True:
         if event.type == KEYDOWN:
             if event.key == K_f:
                 print(rects.union().center)
-
+    if gamelevel > len(walllist) or gamelevel > len(winslist):
+        gamelevel = messagescreen.update(win=True, reset=True)
+        pygame.display.update()
+        continue
     if prevgamelevel != gamelevel:
         prevgamelevel = gamelevel
         rects.reset()
@@ -257,10 +260,6 @@ while True:
         jumpenergy.setenergy(gamelevel)
     screen.fill((255, 255, 255))
     if gamelevel != 0:
-        if gamelevel > len(walllist) or gamelevel > len(winslist):
-            gamelevel = messagescreen.update(win=True, reset=True)
-            pygame.display.update()
-            continue
         walls = walllist[gamelevel-1]
         wins = winslist[gamelevel-1]
         rects.update()
