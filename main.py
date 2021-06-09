@@ -54,10 +54,19 @@ class Rectangles():
     def draw(self, screen):
         pygame.draw.rect(screen, self.rect1colour, self.rect1)
         pygame.draw.rect(screen, self.rect2colour, self.rect2)
-        
 
+class Wall(pygame.sprite.Sprite):
+    def __init__(self, x, y, w, h):
+        super().__init__()
+        self.image = pygame.Surface((w, h))
+        self.rect = pygame.Rect((x, y), (w, h))
+    
+    def draw(self, screen):
+        pygame.draw.rect(screen, (255, 0, 0), self.rect)
 
 rects = Rectangles((200, 150), (400, 150), (200, 300), (200, 300), (0, 255, 0), (0, 0, 255), 20, WIDTH, HEIGHT)
+walls = pygame.sprite.Group()
+walls.add(Wall(100, 100, 40, 20))
 
 clock = pygame.time.Clock()
 
@@ -73,4 +82,5 @@ while True:
     rects.update()
     screen.fill((255, 255, 255))
     rects.draw(screen)
+    walls.draw(screen)
     pygame.display.update()
