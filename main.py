@@ -153,16 +153,18 @@ class OneWayWall(Wall):
             super().draw(screen)
     
     def checkcollision(self, rect1, rect2):
+        if self.defused:
+            return False
         if rect1.colliderect(self.rect):
             if self.rect1pass:
                 self.defused = True
             else:
-                return self.defused
+                return True
         if rect2.colliderect(self.rect):
             if self.rect2pass:
                 self.defused = True
             else:
-                return self.defused
+                return True
         return False
 
 
@@ -186,7 +188,7 @@ walllist[-1].add(Wall(0, 0, WIDTH, 25))
 walllist[-1].add(Wall(0, 0, 25, HEIGHT))
 walllist[-1].add(Wall(0, HEIGHT-25, WIDTH, 25))
 walllist[-1].add(Wall(WIDTH-25, 0, 25, HEIGHT))
-
+walllist[-1].add(OneWayWall(540, 0, 25, HEIGHT, False, True))
 winslist.append(pygame.sprite.Group())
 winslist[-1].add(WinShape(700, 300, 25))
 
