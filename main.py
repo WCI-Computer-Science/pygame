@@ -94,7 +94,7 @@ class WinShape(pygame.sprite.Sprite):
 class MessageScreen():
     def __init__(self, screenwidth, screenheight):
         self.c = 0
-        self.win = False
+        self.moveon = False
         self.backgroundrect = pygame.Rect((0, 0), (screenwidth, screenheight))
         self.font = pygame.font.Font(None, 100)
         self.canclick = False
@@ -102,26 +102,28 @@ class MessageScreen():
         self.screenwidth = screenwidth
         self.screenheight = screenheight
         self.nextlevel = 1
+        self.win = False
         
 
     def draw(self, screen):
 
-        text = self.font.render("You lost!", True, (255, 255, 255)) if not self.win else self.font.render("You passed the level!", True, (255, 255, 255))
+        text = (self.font.render("You lost!", True, (255, 255, 255)) if not self.moveon else self.font.render("You passed the level!", True, (255, 255, 255))) if not self.win else self.font.render("You won!", True, (255, 255, 255))
         textrect = text.get_rect()
         textrect.center = (self.screenwidth/2, self.screenheight/2)
 
-        pygame.draw.rect(screen, (255, 0, 0) if not self.win else (0, 255, 0), self.backgroundrect)
+        pygame.draw.rect(screen, (255, 0, 0) if not self.moveon and not self.win else (0, 255, 0), self.backgroundrect)
         screen.blit(text, textrect)
         if self.canclick:
-            clicktext = self.clickfont.render("Click to try again.", True, (255, 255, 255)) if not self.win else self.clickfont.render("Click to move on.", True, (255, 255, 255))
+            clicktext = (self.clickfont.render("Click to try again.", True, (255, 255, 255)) if not self.moveon else self.clickfont.render("Click to move on.", True, (255, 255, 255))) if not self.win else self.clickfont.render("Click to restart.", True, (255, 255, 255))
             clicktextrect = clicktext.get_rect()
             clicktextrect.center = (self.screenwidth/2, self.screenheight/2+100)
             screen.blit(clicktext, clicktextrect)
 
-    def update(self, win=False, reset=False, nextlevel=1):
+    def update(self, win=False, moveon=False, reset=False, nextlevel=1):
         if reset:
             self.nextlevel = nextlevel
             self.win = win
+            self.moveon = moveon
             self.canclick = False
             self.c = 0
         else:
@@ -134,14 +136,17 @@ class MessageScreen():
         return out
 
 rects = Rectangles((350, 250), (400, 250), (50, 100), (50, 100), (0, 255, 0), (0, 0, 255), 20, WIDTH, HEIGHT)
-walls = pygame.sprite.Group()
-walls.add(Wall(125, 125, WIDTH-250, 25))
-walls.add(Wall(125, HEIGHT-150, WIDTH-250, 25))
-walls.add(Wall(125, 125, 25, HEIGHT-250))
-walls.add(Wall(WIDTH-150, 125, 25, HEIGHT-250))
 
-wins = pygame.sprite.Group()
-wins.add(WinShape(50, 50, 25))
+walllist = []
+winslist = []
+## Level 1
+walllist.append(pygame.sprite.Group())
+walllist[-1].add(Wall(125, 125, WIDTH-250, 25))
+walllist[-1].add(Wall(125, HEIGHT-150, WIDTH-250, 25))
+walllist[-1].add(Wall(125, 125, 25, HEIGHT-250))
+walllist[-1].add(Wall(WIDTH-150, 125, 25, HEIGHT-250))
+winslist.append(pygame.sprite.Group())
+winslist[-1].add(WinShape(50, 50, 25))
 
 messagescreen = MessageScreen(WIDTH, HEIGHT)
 
@@ -163,7 +168,7 @@ while True:
                 gamelevel = messagescreen.update(reset=True)
                 messagescreen.draw(screen)
             elif event.code == "WIN":
-                gamelevel = messagescreen.update(win=True, reset=True, nextlevel=gamelevel+1)
+                gamelevel = messagescreen.update(moveon=True, reset=True, nextlevel=gamelevel+1)
                 messagescreen.draw(screen)
 
     if prevgamelevel != gamelevel:
@@ -171,6 +176,12 @@ while True:
         rects.reset()
     screen.fill((255, 255, 255))
     if gamelevel != 0:
+        if gamelevel > len(walllist) or gamelevel > len(winslist):
+            gamelevel = messagescreen.update(win=True, reset=True)
+            pygame.display.update()
+            continue
+        walls = walllist[gamelevel-1]
+        wins = winslist[gamelevel-1]
         rects.update()
         if rects.checkcollision(walls):
             loseevent = pygame.event.Event(USEREVENT, code="LOSE")
