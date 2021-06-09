@@ -73,6 +73,9 @@ class Rectangles():
         self.rect1 = self.originalrect1.move(0, 0) # Re-set the rectangles, using .move() to ensure that they don't just point to self.originalrect#
         self.rect2 = self.originalrect2.move(0, 0)
 
+    def center(self):
+        return self.rect1.union(self.rect2).center
+
 class Wall(pygame.sprite.Sprite):
     def __init__(self, x, y, w, h):
         super().__init__()
@@ -157,6 +160,7 @@ walllist[-1].add(Wall(0, HEIGHT-25, WIDTH, 25))
 walllist[-1].add(Wall(WIDTH-25, 0, 25, HEIGHT))
 
 winslist.append(pygame.sprite.Group())
+winslist[-1].add(WinShape(700, 300, 25))
 
 messagescreen = MessageScreen(WIDTH, HEIGHT)
 
@@ -180,6 +184,9 @@ while True:
             elif event.code == "WIN":
                 gamelevel = messagescreen.update(moveon=True, reset=True, nextlevel=gamelevel+1)
                 messagescreen.draw(screen)
+        if event.type == KEYDOWN:
+            if event.key == K_f:
+                print(rects.center())
 
     if prevgamelevel != gamelevel:
         prevgamelevel = gamelevel
