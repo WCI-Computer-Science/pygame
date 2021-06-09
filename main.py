@@ -83,11 +83,12 @@ class Wall(pygame.sprite.Sprite):
         pygame.draw.rect(screen, (255, 0, 0), self.rect)
 
 class LoseScreen():
-    def __init__(self):
+    def __init__(self, screenwidth, screenheight):
         self.c = 0
+        self.backgroundrect = pygame.Rect((0, 0), (screenwidth, screenheight))
 
     def draw(self, screen):
-        pass
+        pygame.draw.rect(screen, (255, 0, 0), self.backgroundrect)
 
     def update(self, reset=False):
         if reset:
@@ -99,7 +100,7 @@ class LoseScreen():
 rects = Rectangles((350, 250), (400, 250), (50, 100), (50, 100), (0, 255, 0), (0, 0, 255), 20, WIDTH, HEIGHT)
 walls = pygame.sprite.Group()
 walls.add(Wall(100, 100, WIDTH-200, 20))
-losescreen = LoseScreen()
+losescreen = LoseScreen(WIDTH, HEIGHT)
 
 clock = pygame.time.Clock()
 
