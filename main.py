@@ -54,6 +54,12 @@ class Rectangles():
     def draw(self, screen):
         pygame.draw.rect(screen, self.rect1colour, self.rect1)
         pygame.draw.rect(screen, self.rect2colour, self.rect2)
+    
+    def checkcollision(self, spritegroup):
+        for i in spritegroup:
+            if self.rect1.colliderect(i.rect) or self.rect1.colliderect(i.rect):
+                return True
+        return False
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, x, y, w, h):
@@ -80,6 +86,7 @@ while True:
             rects.setpos(pos[0], pos[1])
         
     rects.update()
+    print(rects.checkcollision(walls))
     screen.fill((255, 255, 255))
     rects.draw(screen)
     walls.draw(screen)
