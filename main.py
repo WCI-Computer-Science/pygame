@@ -13,6 +13,8 @@ class Rectangles():
     def __init__(self, rect1startpos, rect2startpos, rect1size, rect2size, rect1colour, rect2colour, speed, windowwidth, windowheight):
         self.rect1 = pygame.Rect(rect1startpos, rect1size)
         self.rect2 = pygame.Rect(rect2startpos, rect2size)
+        self.originalrect1 = pygame.Rect(rect1startpos, rect1size)
+        self.originalrect2 = pygame.Rect(rect2startpos, rect2size)
         self.rect1colour = rect1colour
         self.rect2colour = rect2colour
         self.speed = speed
@@ -60,6 +62,10 @@ class Rectangles():
             if self.rect1.colliderect(i.rect) or self.rect1.colliderect(i.rect):
                 return True
         return False
+    
+    def reset(self):
+        self.rect1 = self.originalrect1
+        self.rect2 = self.originalrect2
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, x, y, w, h):
@@ -86,7 +92,8 @@ while True:
             rects.setpos(pos[0], pos[1])
         
     rects.update()
-    print(rects.checkcollision(walls))
+    if rects.checkcollision(walls):
+        rects.reset()
     screen.fill((255, 255, 255))
     rects.draw(screen)
     for sprite in walls:
