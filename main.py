@@ -145,8 +145,18 @@ walllist[-1].add(Wall(125, 125, WIDTH-250, 25))
 walllist[-1].add(Wall(125, HEIGHT-150, WIDTH-250, 25))
 walllist[-1].add(Wall(125, 125, 25, HEIGHT-250))
 walllist[-1].add(Wall(WIDTH-150, 125, 25, HEIGHT-250))
+
 winslist.append(pygame.sprite.Group())
 winslist[-1].add(WinShape(50, 50, 25))
+
+## Level 2
+walllist.append(pygame.sprite.Group())
+walllist[-1].add(Wall(0, 0, WIDTH, 25))
+walllist[-1].add(Wall(0, 0, 25, HEIGHT))
+walllist[-1].add(Wall(0, HEIGHT-25, WIDTH, 25))
+walllist[-1].add(Wall(WIDTH-25, 0, 25, HEIGHT))
+
+winslist.append(pygame.sprite.Group())
 
 messagescreen = MessageScreen(WIDTH, HEIGHT)
 
