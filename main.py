@@ -4,8 +4,15 @@ from pygame.locals import *
 pygame.init()
 
 screen = pygame.display.set_mode((800, 600))
-rect = pygame.Rect((200, 150), (200, 300))
-rect2 = pygame.Rect((400, 150), (200, 300))
+
+class Rectangles():
+    def __init__(self, rect1startpos, rect2startpos, rect1size, rect2size, rect1colour, rect2colour):
+        self.rect1 = pygame.Rect(rect1startpos, rect1size)
+        self.rect2 = pygame.Rect(rect2startpos, rect2size)
+        self.rect1colour = rect1colour
+        self.rect2colour = rect2colour
+
+rects = Rectangles((200, 150), (400, 150), (200, 300), (200, 300), (0, 255, 0), (0, 0, 255))
 
 while True:
     for event in pygame.event.get():
@@ -22,6 +29,4 @@ while True:
                 rect = rect.move(1, 0)
     
     screen.fill((255, 255, 255))
-    pygame.draw.rect(screen, (0, 255, 0), rect)
-    pygame.draw.rect(screen, (0, 0, 255), rect2)
     pygame.display.update()
