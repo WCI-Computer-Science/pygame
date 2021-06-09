@@ -58,6 +58,8 @@ class Rectangles():
         if safe and self.checkcollision(colliders):
             self.rect1 = backuprect1.move(0,0)
             self.rect2 = backuprect2.move(0,0)
+            return False
+        return True
     
     def draw(self, screen):
         pygame.draw.rect(screen, self.rect1colour, self.rect1)
@@ -173,6 +175,16 @@ class OneWayWall(Wall):
     def reset(self):
         self.defused = False
 
+class Energy():
+    def __init__(self, energylevels):
+        self.energylevels = energylevels
+        self.setenergy(1)
+    
+    def setenergy(self, gamelevel):
+        self.energylevel = self.energylevels[gamelevel-1]
+
+    def draw(self, screen):
+        print(self.energylevel)
 
 rects = Rectangles((350, 250), (400, 250), (50, 100), (50, 100), (0, 255, 0), (0, 0, 255), 20, WIDTH, HEIGHT)
 
@@ -199,6 +211,10 @@ winslist.append(pygame.sprite.Group())
 winslist[-1].add(WinShape(700, 300, 25))
 
 messagescreen = MessageScreen(WIDTH, HEIGHT)
+jumpenergy = Energy([
+    1,
+    0,
+])
 
 clock = pygame.time.Clock()
 
@@ -211,8 +227,9 @@ while True:
         if event.type == QUIT:
             raise SystemExit
         if event.type == MOUSEBUTTONDOWN:
-            pos = pygame.mouse.get_pos()
-            rects.setpos(pos[0], pos[1], safe=True, colliders=walls)
+            if jumpenergy.energylevel > 0:
+                pos = pygame.mouse.get_pos()
+                jumpenergy.energylevel -= 1 if rects.setpos(pos[0], pos[1], safe=True, colliders=walls) else 0
         if event.type == USEREVENT:
             if event.code == "LOSE":
                 gamelevel = messagescreen.update(reset=True)
@@ -229,6 +246,7 @@ while True:
         rects.reset()
         for sprite in walls:
             sprite.reset()
+        jumpenergy.setenergy(gamelevel)
     screen.fill((255, 255, 255))
     if gamelevel != 0:
         if gamelevel > len(walllist) or gamelevel > len(winslist):
@@ -250,6 +268,7 @@ while True:
             sprite.draw(screen)
         for sprite in wins:
             sprite.draw(screen)
+        jumpenergy.draw(screen)
         
     else:
         gamelevel = messagescreen.update()
