@@ -88,10 +88,12 @@ class LoseScreen():
         self.backgroundrect = pygame.Rect((0, 0), (screenwidth, screenheight))
         self.font = pygame.font.Font(None, 100)
         self.text = self.font.render("You lost!", True, (255, 255, 255))
+        self.text_rect = self.text.get_rect()
+        self.text_rect.center = (screenwidth/2, screenheight/2)
 
     def draw(self, screen):
         pygame.draw.rect(screen, (255, 0, 0), self.backgroundrect)
-        screen.blit(self.text, self.backgroundrect)
+        screen.blit(self.text, self.text_rect)
 
     def update(self, reset=False):
         if reset:
