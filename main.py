@@ -2,10 +2,12 @@ import pygame
 from pygame.locals import *
 
 FRAMERATE = 30
+WIDTH = 800
+HEIGHT = 600
 
 pygame.init()
 
-screen = pygame.display.set_mode((800, 600))
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 class Rectangles():
     def __init__(self, rect1startpos, rect2startpos, rect1size, rect2size, rect1colour, rect2colour, speed):
