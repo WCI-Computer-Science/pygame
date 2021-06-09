@@ -45,6 +45,11 @@ class Rectangles():
             self.rect1.y = self.windowrect.bottom-self.rect1.height
             self.rect2.y = self.windowrect.bottom-self.rect2.height
 
+    def setpos(self, x, y): # Sets top-left position
+        self.rect1.x = x
+        self.rect1.y = y
+        self.rect2.x = x+self.rect1.w
+        self.rect2.y = y
     
     def draw(self, screen):
         pygame.draw.rect(screen, self.rect1colour, self.rect1)
@@ -61,6 +66,10 @@ while True:
     for event in pygame.event.get():
         if event.type == QUIT:
             raise SystemExit
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            pos = pygame.mouse.get_pos()
+            rects.setpos(pos[0], pos[1])
+        
     rects.update()
     screen.fill((255, 255, 255))
     rects.draw(screen)
