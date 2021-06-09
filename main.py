@@ -12,6 +12,9 @@ while True:
     for event in pygame.event.get():
         if event.type == QUIT:
             raise SystemExit
+
+    rect = rect.move(1, 0)
+
     pygame.draw.rect(screen, (0, 255, 0), rect)
     pygame.draw.rect(screen, (0, 0, 255), rect2)
     pygame.display.update()
