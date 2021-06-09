@@ -64,8 +64,8 @@ class Rectangles():
         return False
     
     def reset(self):
-        self.rect1 = self.originalrect1
-        self.rect2 = self.originalrect2
+        self.rect1 = self.originalrect1.move(0, 0) # Re-set the rectangles, using .move() to ensure that they don't just point to self.originalrect#
+        self.rect2 = self.originalrect2.move(0, 0)
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, x, y, w, h):
