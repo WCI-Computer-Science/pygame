@@ -116,7 +116,10 @@ class LoseScreen():
 
 rects = Rectangles((350, 250), (400, 250), (50, 100), (50, 100), (0, 255, 0), (0, 0, 255), 20, WIDTH, HEIGHT)
 walls = pygame.sprite.Group()
-walls.add(Wall(100, 100, WIDTH-200, 20))
+walls.add(Wall(125, 125, WIDTH-250, 25))
+walls.add(Wall(125, HEIGHT-150, WIDTH-250, 25))
+walls.add(Wall(125, 125, 25, HEIGHT-250))
+walls.add(Wall(WIDTH-150, 125, 25, HEIGHT-250))
 losescreen = LoseScreen(WIDTH, HEIGHT)
 
 clock = pygame.time.Clock()
