@@ -100,7 +100,11 @@ class LoseScreen():
             self.c = 0
         else:
             self.c += 1
-        return self.c > 20
+        out = 0
+        if self.c > 20:
+            if pygame.mouse.get_pressed()[0]:
+                out = 1
+        return out
 
 rects = Rectangles((350, 250), (400, 250), (50, 100), (50, 100), (0, 255, 0), (0, 0, 255), 20, WIDTH, HEIGHT)
 walls = pygame.sprite.Group()
