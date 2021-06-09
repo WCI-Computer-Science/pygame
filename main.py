@@ -190,8 +190,8 @@ class Energy():
         msg = "Jumps left (click): " + str(self.energylevel)
         text = self.font.render(msg, True, (0, 0, 0))
         textrect = text.get_rect()
-        textrect.x = self.screenwidth-25-self.font.size(msg)[0]
-        textrect.y = self.screenheight-25-self.font.size(msg)[1]
+        textrect.x = self.screenwidth-30-self.font.size(msg)[0]
+        textrect.y = self.screenheight-30-self.font.size(msg)[1]
         screen.blit(text, textrect)
 
 rects = Rectangles((350, 250), (400, 250), (50, 100), (50, 100), (0, 255, 0), (0, 0, 255), 20, WIDTH, HEIGHT)
