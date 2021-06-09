@@ -76,11 +76,20 @@ class Rectangles():
 class Wall(pygame.sprite.Sprite):
     def __init__(self, x, y, w, h):
         super().__init__()
-        self.image = pygame.Surface((w, h))
         self.rect = pygame.Rect((x, y), (w, h))
     
     def draw(self, screen):
         pygame.draw.rect(screen, (255, 0, 0), self.rect)
+
+class WinShape(pygame.sprite.Sprite):
+    def __init__(self, centerx, centery, radius):
+        super().__init__()
+        self.center = (centerx, centery)
+        self.radius = radius
+        self.rect = pygame.draw.circle(screen, (0, 255, 0), self.center, self.radius) #pygame.draw returns the bounding box of what it draws, so that's our rect
+
+    def draw(self, screen):
+        pygame.draw.circle(screen, (0, 255, 0), self.center, self.radius)
 
 class MessageScreen():
     def __init__(self, screenwidth, screenheight, win=False):
@@ -122,6 +131,9 @@ walls.add(Wall(125, HEIGHT-150, WIDTH-250, 25))
 walls.add(Wall(125, 125, 25, HEIGHT-250))
 walls.add(Wall(WIDTH-150, 125, 25, HEIGHT-250))
 
+wins = pygame.sprite.Group()
+wins.add(WinShape(50, 50, 25))
+
 losescreen = MessageScreen(WIDTH, HEIGHT)
 winscreen = MessageScreen(WIDTH, HEIGHT, win=True)
 
@@ -155,6 +167,9 @@ while True:
         rects.draw(screen)
         for sprite in walls:
             sprite.draw(screen)
+        for sprite in wins:
+            sprite.draw(screen)
+        
     else:
         gamelevel = losescreen.update()
         losescreen.draw(screen)
