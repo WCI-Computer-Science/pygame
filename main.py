@@ -84,6 +84,9 @@ class Wall(pygame.sprite.Sprite):
     def draw(self, screen):
         pygame.draw.rect(screen, (255, 0, 0), self.rect)
 
+    def checkcollision(self, rect1, rect2):
+        return self.rect.colliderect(rect1) or self.rect.colliderect(rect2)
+
 class WinShape(pygame.sprite.Sprite):
     def __init__(self, centerx, centery, radius):
         super().__init__()
@@ -200,9 +203,10 @@ while True:
         walls = walllist[gamelevel-1]
         wins = winslist[gamelevel-1]
         rects.update()
-        if rects.checkcollision(walls):
-            loseevent = pygame.event.Event(USEREVENT, code="LOSE")
-            pygame.event.post(loseevent)
+        for sprite in walls:
+            if sprite.checkcollision(rects.rect1, rects.rect2):
+                loseevent = pygame.event.Event(USEREVENT, code="LOSE")
+                pygame.event.post(loseevent)
         if rects.checkcollision(wins):
             winevent = pygame.event.Event(USEREVENT, code="WIN")
             pygame.event.post(winevent)
