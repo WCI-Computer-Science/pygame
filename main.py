@@ -187,12 +187,12 @@ class Energy():
         self.energylevel = self.energylevels[gamelevel-1]
 
     def draw(self, screen):
-        text = self.font.render(str(self.energylevel), True, (0, 0, 0))
+        msg = "Jumps left (click): " + str(self.energylevel)
+        text = self.font.render(msg, True, (0, 0, 0))
         textrect = text.get_rect()
-        textrect.x = self.screenwidth-50
-        textrect.y = self.screenheight-50
+        textrect.x = self.screenwidth-25-self.font.size(msg)[0]
+        textrect.y = self.screenheight-25-self.font.size(msg)[1]
         screen.blit(text, textrect)
-        print(self.energylevel)
 
 rects = Rectangles((350, 250), (400, 250), (50, 100), (50, 100), (0, 255, 0), (0, 0, 255), 20, WIDTH, HEIGHT)
 
