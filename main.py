@@ -101,6 +101,7 @@ class MessageScreen():
         self.clickfont = pygame.font.Font(None, 30)
         self.screenwidth = screenwidth
         self.screenheight = screenheight
+        self.nextlevel = 1
         
 
     def draw(self, screen):
@@ -117,8 +118,9 @@ class MessageScreen():
             clicktextrect.center = (self.screenwidth/2, self.screenheight/2+100)
             screen.blit(clicktext, clicktextrect)
 
-    def update(self, win=False, reset=False):
+    def update(self, win=False, reset=False, nextlevel=1):
         if reset:
+            self.nextlevel = nextlevel
             self.win = win
             self.canclick = False
             self.c = 0
@@ -127,7 +129,7 @@ class MessageScreen():
         out = 0
         if self.c > 20:
             if pygame.mouse.get_pressed()[0]:
-                out = 1
+                out = self.nextlevel
             self.canclick = True
         return out
 
@@ -161,7 +163,7 @@ while True:
                 gamelevel = messagescreen.update(reset=True)
                 messagescreen.draw(screen)
             elif event.code == "WIN":
-                gamelevel = messagescreen.update(win=True, reset=True)
+                gamelevel = messagescreen.update(win=True, reset=True, nextlevel=gamelevel+1)
                 messagescreen.draw(screen)
 
     if prevgamelevel != gamelevel:
