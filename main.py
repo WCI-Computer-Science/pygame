@@ -47,11 +47,17 @@ class Rectangles():
             self.rect1.y = self.windowrect.bottom-self.rect1.height
             self.rect2.y = self.windowrect.bottom-self.rect2.height
 
-    def setpos(self, x, y): # Sets top-left position
+    def setpos(self, x, y, safe=False, colliders=None): # Sets top-left position
+        if safe:
+            backuprect1 = self.rect1.move(0,0)
+            backuprect2 = self.rect2.move(0,0)
         self.rect1.x = x
         self.rect1.y = y
         self.rect2.x = x+self.rect1.w
         self.rect2.y = y
+        if safe and self.checkcollision(colliders):
+            self.rect1 = backuprect1.move(0,0)
+            self.rect2 = backuprect2.move(0,0)
     
     def draw(self, screen):
         pygame.draw.rect(screen, self.rect1colour, self.rect1)
@@ -89,7 +95,7 @@ while True:
             raise SystemExit
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
-            rects.setpos(pos[0], pos[1])
+            rects.setpos(pos[0], pos[1], safe=True, colliders=walls)
         
     rects.update()
     if rects.checkcollision(walls):
