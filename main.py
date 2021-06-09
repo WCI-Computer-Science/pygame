@@ -194,7 +194,7 @@ walllist[-1].add(Wall(0, 0, WIDTH, 25))
 walllist[-1].add(Wall(0, 0, 25, HEIGHT))
 walllist[-1].add(Wall(0, HEIGHT-25, WIDTH, 25))
 walllist[-1].add(Wall(WIDTH-25, 0, 25, HEIGHT))
-walllist[-1].add(OneWayWall(540, 0, 25, HEIGHT, False))
+walllist[-1].add(OneWayWall(540, 25, 25, HEIGHT-50, False))
 winslist.append(pygame.sprite.Group())
 winslist[-1].add(WinShape(700, 300, 25))
 
