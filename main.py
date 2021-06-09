@@ -11,8 +11,15 @@ while True:
     for event in pygame.event.get():
         if event.type == QUIT:
             raise SystemExit
-
-    rect = rect.move(1, 0)
+        if event.type == KEYDOWN:
+            if event.key == K_w:
+                rect = rect.move(0, -1)
+            elif event.key == K_a:
+                rect = rect.move(-1, 0)
+            elif event.key == K_s:
+                rect = rect.move(0, 1)
+            elif event.key == K_d:
+                rect = rect.move(1, 0)
     
     screen.fill((255, 255, 255))
     pygame.draw.rect(screen, (0, 255, 0), rect)
