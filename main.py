@@ -82,26 +82,53 @@ class Wall(pygame.sprite.Sprite):
     def draw(self, screen):
         pygame.draw.rect(screen, (255, 0, 0), self.rect)
 
+class LoseScreen():
+    def __init__(self):
+        pass
+    def draw(self, screen):
+        pass
+    def update(self, reset=False):
+        if reset:
+            return 0
+        else:
+            return 1
+
 rects = Rectangles((350, 250), (400, 250), (50, 100), (50, 100), (0, 255, 0), (0, 0, 255), 20, WIDTH, HEIGHT)
 walls = pygame.sprite.Group()
 walls.add(Wall(100, 100, WIDTH-200, 20))
+losescreen = LoseScreen()
 
 clock = pygame.time.Clock()
+
+gamelevel = 1
+prevgamelevel = 0
 
 while True:
     clock.tick(FRAMERATE) # Stall until the next frame
     for event in pygame.event.get():
         if event.type == QUIT:
             raise SystemExit
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
             rects.setpos(pos[0], pos[1], safe=True, colliders=walls)
-        
-    rects.update()
-    if rects.checkcollision(walls):
+        if event.type == USEREVENT:
+            if event.code == "LOSE":
+                gamelevel = losescreen.update(reset=True)
+                losescreen.draw(screen)
+
+    if prevgamelevel != gamelevel:
+        prevgamelevel = gamelevel
         rects.reset()
     screen.fill((255, 255, 255))
-    rects.draw(screen)
-    for sprite in walls:
-        sprite.draw(screen)
+    if gamelevel != 0:
+        rects.update()
+        if rects.checkcollision(walls):
+            loseevent = pygame.event.Event(USEREVENT, code="LOSE")
+            pygame.event.post(loseevent)
+        rects.draw(screen)
+        for sprite in walls:
+            sprite.draw(screen)
+    else:
+        gamelevel = losescreen.update()
+        losescreen.draw(screen)
     pygame.display.update()
